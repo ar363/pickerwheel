@@ -23,13 +23,18 @@
 
   let sel;
   let showSel = false;
+  let isSpinning = false;
 
   const spinWheel = () => {
-    let selectedInps = $inps.filter((i) => i.selected == true);
+    isSpinning = true;
+    setTimeout(() => {
+      isSpinning = false;
+      let selectedInps = $inps.filter((i) => i.selected == true);
 
-    let selInt = Math.floor(Math.random() * selectedInps.length);
-    sel = selectedInps[selInt];
-    showSel = true;
+      let selInt = Math.floor(Math.random() * selectedInps.length);
+      sel = selectedInps[selInt];
+      showSel = true;
+    }, 400)
   };
 
   const hideChoice = () => {
@@ -91,9 +96,10 @@
 </div>
 
 {#if showSel}
-  <div class="full-modal">
+  <div class="full-modal {isSpinning ? 'spinning' : ''}">
     <div class="container">
       <p>Selected Option</p>
+      <h1 class="spinning-indicator">Spinning...</h1>
       <h1 class="modal-ans">
         {#if sel}
           {#if sel.value}
@@ -323,5 +329,26 @@
 
   .btn-list button {
     padding: 1rem;
+  }
+
+  .full-modal.spinning {
+    background-color: hsl(0, 100%, 40%);
+  }
+
+  .full-modal.spinning p {
+    display: none;
+  }
+
+  .spinning-indicator {
+    display: none;
+    font-size: 4rem;
+  }
+
+  .full-modal.spinning .modal-ans, .full-modal.spinning .btn-list {
+    display: none;
+  }
+
+  .full-modal.spinning .spinning-indicator {
+    display: block;
   }
 </style>
